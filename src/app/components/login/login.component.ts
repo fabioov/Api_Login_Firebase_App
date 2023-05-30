@@ -6,6 +6,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NgToastService } from 'ng-angular-popup';
 import { UserCredential, UserProfile } from '@angular/fire/auth';
 import { UsersService } from 'src/app/services/users.service';
+import { ProfileUser } from 'src/app/models/user-profile';
 
 @Component({
   selector: 'app-login',
@@ -44,8 +45,8 @@ export class LoginComponent implements OnInit {
     this.authService
       .login(email, password)
       .pipe(
-        tap(() => {
-          const successMessage = `Welcome back`; // Create the success message
+      tap(() => {
+        const successMessage = `Welcome back!`;
           this.toast.success({
             detail: successMessage,
             summary: 'You are logged in!',
