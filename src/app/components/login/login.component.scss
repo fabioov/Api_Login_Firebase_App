@@ -2,3 +2,17 @@
     font-size: 1rem;
     margin-left: 8px;
 }
+
+.left {
+    display: flex;
+    justify-content: right;
+    font-size: .7rem;
+    margin-right: 8px;
+}
+
+.forgot-password-link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  

@@ -5,9 +5,11 @@ import {
   UserInfo,
   authState,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   updateProfile,
 } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import {
   Observable,
@@ -29,7 +31,7 @@ import {
 export class AuthenticationService {
   currentUser$ = authState(this.auth);
 
-  constructor(private auth: Auth, private toast: NgToastService) {}
+  constructor(private auth: Auth, private toast: NgToastService, private router: Router) {}
 
   login(username: string, password: string) {
     return from(signInWithEmailAndPassword(this.auth, username, password));
@@ -48,6 +50,38 @@ export class AuthenticationService {
 
         return updateProfile(user, profileData);
       })
+    );
+  }
+
+  forgotPassword(email: string) {
+
+    if (!email) {
+      this.toast.warning({
+        detail: 'Forgot something?!',
+        summary: 'Please, enter your email.',
+        duration: 3000,
+      });
+      return;
+    }
+
+    return from(
+      sendPasswordResetEmail(this.auth, email).then(
+        () => {
+          this.toast.success({
+            detail: 'Check your email.',
+            summary: 'Email sent!',
+            duration: 3000,
+          });
+          this.router.navigate(['/login']);
+        },
+        (err) => {
+          this.toast.warning({
+            detail: 'Invalid email.',
+            summary: 'Try again?!',
+            duration: 3000,
+          });
+        }
+      )
     );
   }
 

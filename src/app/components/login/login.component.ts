@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, map, of, switchMap, tap } from 'rxjs';
+import { catchError, filter, map, of, switchMap, take, tap } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NgToastService } from 'ng-angular-popup';
 import { UserCredential, UserProfile } from '@angular/fire/auth';
@@ -42,14 +42,25 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.authService.currentUser$
+      .pipe(
+        take(1),
+        filter((user) => !!user)
+      )
+      .subscribe(() => {
+        // User is already authenticated, skip the login logic
+        this.router.navigate(['/home']);
+        return;
+      });
+    debugger;
     this.authService
       .login(email, password)
       .pipe(
-      tap(() => {
-        const successMessage = `Welcome back!`;
+        tap(() => {
+          const successMessage = `Welcome back!`;
           this.toast.success({
             detail: successMessage,
-            summary: 'You are logged in!',
+            summary: `You are logged in!`,
             duration: 5000,
           });
           this.router.navigate(['/home']);

@@ -25,8 +25,7 @@ import { provideStorage,getStorage } from '@angular/fire/storage';
 import { NgToastModule } from 'ng-angular-popup'
 import { MatMenuModule } from '@angular/material/menu';
 import { HotToastModule } from '@ngneat/hot-toast';
-
-
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +35,8 @@ import { HotToastModule } from '@ngneat/hot-toast';
     LandingComponent,
     HomeComponent,
     NotfoundComponent,
-    ProfileComponent
+    ProfileComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
