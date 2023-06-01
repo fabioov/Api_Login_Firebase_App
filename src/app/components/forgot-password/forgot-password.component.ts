@@ -43,14 +43,14 @@ export class ForgotPasswordComponent implements OnInit {
       });
       return;
     }
-  
+
     this.isLoading = true;
-  
+
     this.authService
       .forgotPassword(email)
       .pipe(
-        tap(
-          () => {
+        tap({
+          next: () => {
             this.toast.success({
               detail: 'E-mail sent!',
               summary: 'Check your inbox!',
@@ -58,15 +58,15 @@ export class ForgotPasswordComponent implements OnInit {
             });
             this.router.navigate(['/home']);
           },
-          (error: any) => {
+          error: (error: any) => {
             this.toast.error({
               detail: 'Invalid e-mail.',
               summary: 'E-mail does not exist in our database!',
               duration: 5000,
             });
             this.isLoading = false;
-          }
-        )
+          },
+        })
       )
       .subscribe();
   }
