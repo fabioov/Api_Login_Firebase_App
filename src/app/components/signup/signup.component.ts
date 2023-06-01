@@ -13,6 +13,7 @@ import { NgToastService } from 'ng-angular-popup';
 import {
   catchError,
   concatMap,
+  finalize,
   map,
   of,
   switchMap,
@@ -52,6 +53,7 @@ export class SignupComponent implements OnInit {
     { validators: passwordMatchValidator() }
   );
 
+  signUpInProgress = false;
   constructor(
     private authService: AuthenticationService,
     private router: Router,
@@ -82,6 +84,7 @@ export class SignupComponent implements OnInit {
     if (!this.signUpForm.valid || !name || !email || !password) {
       return;
     }
+    this.signUpInProgress = true;
 
     this.authService
       .signUp(email, password)
@@ -103,7 +106,10 @@ export class SignupComponent implements OnInit {
             summary: error,
             duration: 5000,
           });
-          return of(null); // Return an observable with a value of null to continue the stream
+          return of(null); 
+        }),
+        finalize(() => {
+          this.signUpInProgress = false; 
         })
       )
       .subscribe();

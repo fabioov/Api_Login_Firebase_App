@@ -1,32 +1,45 @@
 <div class="form-container mat-elevation-z5">
     <h1>Login</h1>
     <form [formGroup]="loginForm" (ngSubmit)="submit()">
-        <mat-form-field>
-            <input matInput placeholder="Email address" formControlName="email"/>
-            <mat-error *ngIf="email?.errors?.['required']">
-                Email is required!
-            </mat-error>
-            <mat-error *ngIf="email?.errors?.['email']">
-                Enter a valid email format!
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Password" formControlName="password" type="password"/>
-            <mat-error *ngIf="password?.errors?.['required']">
-                Password is required!
-            </mat-error>
-        </mat-form-field>
-        <div class="left">
-            <span><a routerLink="/forgot-password">Forgot password?</a></span>
-        </div>
-        <div class="center margin-top">
-            <button mat-raised-button color="primary" type="submit">
-                Login
-            </button>
-        </div>
-
-        <span class="center margin-top">New to our platform?<a class="sign-up-link" routerLink="/signup">Sign Up!</a></span>
+      <mat-form-field>
+        <input matInput placeholder="Email address" formControlName="email" />
+        <mat-error *ngIf="email?.errors?.['required']">
+          Email is required!
+        </mat-error>
+        <mat-error *ngIf="email?.errors?.['email']">
+          Enter a valid email format!
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Password"
+          formControlName="password"
+          type="password"
+        />
+        <mat-error *ngIf="password?.errors?.['required']">
+          Password is required!
+        </mat-error>
+      </mat-form-field>
+      <div class="left">
+        <span><a routerLink="/forgot-password">Forgot password?</a></span>
+      </div>
+      <div class="center margin-top">
+        <ng-container *ngIf="loginInProgress">
+          <div class="spinner-container">
+            <mat-spinner diameter="26"></mat-spinner>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!loginInProgress">
+          <button mat-raised-button color="primary" type="submit">
+            Login
+          </button>
+        </ng-container>
+      </div>
     </form>
-
-</div>
-
+    <span class="center margin-top"
+      >New to our platform?<a class="sign-up-link" routerLink="/signup"
+        >Sign Up!</a
+      ></span>
+  </div>
+  

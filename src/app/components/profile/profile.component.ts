@@ -19,6 +19,8 @@ import { UsersService } from 'src/app/services/users.service';
 export class ProfileComponent implements OnInit {
   user$ = this.userService.currentUserProfile$;
 
+  savingProfile = false;
+
   profileForm = this.fb.group({
     uid: [''],
     displayName: [''],
@@ -67,7 +69,10 @@ export class ProfileComponent implements OnInit {
         }),
 
         switchMap((photoURL) =>
-          this.userService.updateUser({ uid: user.uid , photoURL: photoURL ?? undefined })
+          this.userService.updateUser({
+            uid: user.uid,
+            photoURL: photoURL ?? undefined,
+          })
         )
       )
       .subscribe();
@@ -79,6 +84,9 @@ export class ProfileComponent implements OnInit {
     if (!uid) {
       return;
     }
+
+    this.savingProfile = true;
+
     this.userService
       .updateUser({ uid, ...data })
       .pipe(
@@ -98,6 +106,10 @@ export class ProfileComponent implements OnInit {
           return of(null);
         })
       )
-      .subscribe();
+      .subscribe({
+        complete: () => {
+          this.savingProfile = false; // Set savingProfile to false when the save operation is complete
+        },
+      });
   }
 }

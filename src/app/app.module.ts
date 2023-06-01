@@ -26,6 +26,7 @@ import { NgToastModule } from 'ng-angular-popup'
 import { MatMenuModule } from '@angular/material/menu';
 import { HotToastModule } from '@ngneat/hot-toast';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
     provideStorage(() => getStorage()),
     NgToastModule,
     MatMenuModule,
-    HotToastModule
+    HotToastModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

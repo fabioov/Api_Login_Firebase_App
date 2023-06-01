@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, filter, map, of, switchMap, take, tap } from 'rxjs';
+import { catchError, filter, finalize, map, of, switchMap, take, tap } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NgToastService } from 'ng-angular-popup';
-import { UserCredential, UserProfile } from '@angular/fire/auth';
+import { UserCredential, UserProfile, user } from '@angular/fire/auth';
 import { UsersService } from 'src/app/services/users.service';
 import { ProfileUser } from 'src/app/models/user-profile';
 
@@ -14,6 +14,8 @@ import { ProfileUser } from 'src/app/models/user-profile';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  loginInProgress = false;
+
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
@@ -50,8 +52,8 @@ export class LoginComponent implements OnInit {
       .subscribe(() => {
         // User is already authenticated, skip the login logic
         this.router.navigate(['/home']);
-        return;
       });
+      this.loginInProgress = true; 
     debugger;
     this.authService
       .login(email, password)
@@ -72,8 +74,10 @@ export class LoginComponent implements OnInit {
             duration: 5000,
           });
           return of(null); // Return an observable with a value of null to continue the stream
+        }),
+        finalize(() => {
+          this.loginInProgress = false;
         })
-      )
-      .subscribe();
+      ).subscribe();
   }
 }

@@ -12,6 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import {
+  BehaviorSubject,
   Observable,
   catchError,
   concatMap,
@@ -31,7 +32,11 @@ import {
 export class AuthenticationService {
   currentUser$ = authState(this.auth);
 
-  constructor(private auth: Auth, private toast: NgToastService, private router: Router) {}
+  constructor(
+    private auth: Auth,
+    private toast: NgToastService,
+    private router: Router
+  ) {}
 
   login(username: string, password: string) {
     return from(signInWithEmailAndPassword(this.auth, username, password));
@@ -54,35 +59,7 @@ export class AuthenticationService {
   }
 
   forgotPassword(email: string) {
-
-    if (!email) {
-      this.toast.warning({
-        detail: 'Forgot something?!',
-        summary: 'Please, enter your email.',
-        duration: 3000,
-      });
-      return;
-    }
-
-    return from(
-      sendPasswordResetEmail(this.auth, email).then(
-        () => {
-          this.toast.success({
-            detail: 'Check your email.',
-            summary: 'Email sent!',
-            duration: 3000,
-          });
-          this.router.navigate(['/login']);
-        },
-        (err) => {
-          this.toast.warning({
-            detail: 'Invalid email.',
-            summary: 'Try again?!',
-            duration: 3000,
-          });
-        }
-      )
-    );
+    return from(sendPasswordResetEmail(this.auth, email));
   }
 
   logout() {
