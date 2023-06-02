@@ -1,29 +1,24 @@
 import { Injectable } from '@angular/core';
 import {
   Auth,
+  GithubAuthProvider,
+  GoogleAuthProvider,
   UserCredential,
   UserInfo,
   authState,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithPopup,
   updateProfile,
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import {
-  BehaviorSubject,
   Observable,
-  catchError,
   concatMap,
-  finalize,
-  firstValueFrom,
   from,
   of,
-  switchMap,
-  take,
-  tap,
-  throwError,
 } from 'rxjs';
 
 @Injectable({
@@ -69,5 +64,15 @@ export class AuthenticationService {
       duration: 3000,
     });
     return from(this.auth.signOut());
+  }
+
+  googleSignIn(){
+    const provider = new GoogleAuthProvider();
+    return from(signInWithPopup(this.auth, provider));
+  }
+
+  githubSignIn() {
+    const provider = new GithubAuthProvider();
+    return from(signInWithPopup(this.auth, provider));
   }
 }

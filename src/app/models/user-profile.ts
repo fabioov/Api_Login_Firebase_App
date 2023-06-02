@@ -6,7 +6,11 @@ export interface ProfileUser {
     displayName?: string;
     phone?: string;
     address?: string;
+    addressComp?: string;
+    zipCode?: string;
     photoURL?: string;
+    state?: string;
+    city?: string;
   }
 
   

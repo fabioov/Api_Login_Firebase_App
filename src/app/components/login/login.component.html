@@ -2,7 +2,7 @@
     <h1>Login</h1>
     <form [formGroup]="loginForm" (ngSubmit)="submit()">
       <mat-form-field>
-        <input matInput placeholder="Email address" formControlName="email" />
+        <input matInput placeholder="Email address" formControlName="email" style="text-transform: lowercase;" />
         <mat-error *ngIf="email?.errors?.['required']">
           Email is required!
         </mat-error>
@@ -36,6 +36,16 @@
           </button>
         </ng-container>
       </div>
+      <div class="row">
+        <button mat-button style="padding: 1rem; font-size: .7rem; width: 180px;" (click)="signInWithGoogle()">
+          <mat-icon svgIcon="Google"></mat-icon> Google Login
+        </button>
+        <button mat-button style="padding: 1rem; font-size: .7rem; width: 180px;" (click)="signInWithGithub()">
+            <mat-icon svgIcon="Github"></mat-icon> Github Login
+          </button>
+      </div>
+      
+      
     </form>
     <span class="center margin-top"
       >New to our platform?<a class="sign-up-link" routerLink="/signup"

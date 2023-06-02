@@ -27,10 +27,31 @@
 		  <input type="number" matInput formControlName="phone" placeholder="Phone" />
 		</mat-form-field>
 	  </div>
+	  <div class="row">
+		<mat-form-field>
+		  <input type="text" matInput formControlName="state" placeholder="State" [matAutocomplete]="auto"/>
+		  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+			<mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+			  {{option}}
+			</mat-option>
+		  </mat-autocomplete>
+		</mat-form-field>
+		<mat-form-field>
+		  <input type="text" matInput formControlName="city" placeholder="City" />
+		</mat-form-field>
+	  </div>
+
 	  <mat-form-field>
 		<input type="text" matInput formControlName="address" placeholder="Address" />
 	  </mat-form-field>
-  
+	  <div class="row">
+	  <mat-form-field>
+		<input type="text" matInput formControlName="addressComp" placeholder="Complement" />
+	  </mat-form-field>
+	  <mat-form-field>
+		<input type="text" matInput formControlName="zipCode" placeholder="ZIP Code" />
+	  </mat-form-field>
+	</div>
 	  <div class="margin-top">
 		<ng-container *ngIf="!savingProfile; else spinnerContainer">
 		  <button type="submit" mat-raised-button color="primary">

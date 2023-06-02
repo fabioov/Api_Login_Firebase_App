@@ -1,10 +1,11 @@
+import { state } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { User, user } from '@angular/fire/auth';
 import { FormControl, FormGroup, NonNullableFormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { NgToastService } from 'ng-angular-popup';
-import { catchError, concatAll, concatMap, of, switchMap, tap } from 'rxjs';
+import { Observable, catchError, concatAll, concatMap, map, of, startWith, switchMap, tap } from 'rxjs';
 import { ProfileUser } from 'src/app/models/user-profile';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ImageUploadService } from 'src/app/services/image-upload.service';
@@ -19,6 +20,10 @@ import { UsersService } from 'src/app/services/users.service';
 export class ProfileComponent implements OnInit {
   user$ = this.userService.currentUserProfile$;
 
+  options: string[] = ['RS', 'SC', 'SP'];
+  filteredOptions: Observable<string[]> | undefined;
+
+
   savingProfile = false;
 
   profileForm = this.fb.group({
@@ -28,6 +33,10 @@ export class ProfileComponent implements OnInit {
     lastName: [''],
     phone: [''],
     address: [''],
+    addressComp: [''],
+    state: [''],
+    city: [''],
+    zipCode: ['']
   });
 
   constructor(
@@ -39,12 +48,24 @@ export class ProfileComponent implements OnInit {
     private fb: NonNullableFormBuilder
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.userService.currentUserProfile$
       .pipe(untilDestroyed(this), tap(console.log))
       .subscribe((user) => {
         this.profileForm.patchValue({ ...user });
       });
+      debugger
+      this.filteredOptions = this.profileForm.valueChanges.pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.state),
+        map(state => this._filter(state || ''))
+      );
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   uploadImage(event: any, user: ProfileUser) {
@@ -112,4 +133,5 @@ export class ProfileComponent implements OnInit {
         },
       });
   }
+
 }

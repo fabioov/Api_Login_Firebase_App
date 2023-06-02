@@ -1,6 +1,5 @@
-<mat-toolbar color="primary"> 
-  Sign up Flow with Firebase
-
+<mat-toolbar> 
+  <a class="link" routerLink="">Sign up Flow with Firebase</a>
   <ng-container *ngIf="user$ | async as user; else loginButton">
     <button mat-button [mat-menu-trigger-for]="userMenu">
       <span class="icons-container">
@@ -21,7 +20,7 @@
 
 </mat-toolbar>
 
-<div class="content">
+<div class="content landing-page">
 <router-outlet></router-outlet>
 </div>
 

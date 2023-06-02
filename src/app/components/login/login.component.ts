@@ -1,7 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, filter, finalize, map, of, switchMap, take, tap } from 'rxjs';
+import {
+  catchError,
+  filter,
+  finalize,
+  map,
+  of,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NgToastService } from 'ng-angular-popup';
 import { UserCredential, UserProfile, user } from '@angular/fire/auth';
@@ -53,7 +62,7 @@ export class LoginComponent implements OnInit {
         // User is already authenticated, skip the login logic
         this.router.navigate(['/home']);
       });
-      this.loginInProgress = true; 
+    this.loginInProgress = true;
     debugger;
     this.authService
       .login(email, password)
@@ -78,6 +87,59 @@ export class LoginComponent implements OnInit {
         finalize(() => {
           this.loginInProgress = false;
         })
-      ).subscribe();
+      )
+      .subscribe();
   }
+
+  signInWithGoogle() {
+    this.authService
+      .googleSignIn()
+      .pipe(
+        tap(() => {
+          const successMessage = `Google sign-in successful!`;
+          this.toast.success({
+            detail: successMessage,
+            summary: `You are logged in with Google!`,
+            duration: 5000,
+          });
+          this.router.navigate(['/home']);
+        }),
+        catchError((error: any) => {
+          this.toast.error({
+            detail: 'Google sign-in failed',
+            summary: 'An error occurred during Google sign-in!',
+            duration: 5000,
+          });
+          return of(null); // Return an observable with a value of null to continue the stream
+        })
+      )
+      .subscribe();
+  }
+
+  signInWithGithub() {
+    this.authService
+      .githubSignIn()
+      .pipe(
+        tap(() => {
+          const successMessage = `GitHub sign-in successful!`;
+          this.toast.success({
+            detail: successMessage,
+            summary: `You are logged in with GitHub!`,
+            duration: 5000,
+          });
+          this.router.navigate(['/home']);
+        }),
+        catchError((error: any) => {
+          console.error('GitHub sign-in error:', error); 
+          this.toast.error({
+            detail: 'GitHub sign-in failed',
+            summary: 'An error occurred during GitHub sign-in!',
+            duration: 5000,
+          });
+          return of(null); // Return an observable with a value of null to continue the stream
+        })
+      )
+      .subscribe();
+  }
+  
 }
