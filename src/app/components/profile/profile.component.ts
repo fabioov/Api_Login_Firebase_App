@@ -5,11 +5,26 @@ import { FormControl, FormGroup, NonNullableFormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { NgToastService } from 'ng-angular-popup';
-import { Observable, catchError, concatAll, concatMap, map, of, startWith, switchMap, tap } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  catchError,
+  concatAll,
+  concatMap,
+  map,
+  of,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { ProfileUser } from 'src/app/models/user-profile';
+import { Country } from 'src/app/models/countries';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { GetDataService } from 'src/app/services/get-data.service';
 import { ImageUploadService } from 'src/app/services/image-upload.service';
 import { UsersService } from 'src/app/services/users.service';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+
 
 @UntilDestroy()
 @Component({
@@ -20,9 +35,8 @@ import { UsersService } from 'src/app/services/users.service';
 export class ProfileComponent implements OnInit {
   user$ = this.userService.currentUserProfile$;
 
-  options: string[] = ['RS', 'SC', 'SP'];
-  filteredOptions: Observable<string[]> | undefined;
-
+  filteredStates: Observable<string[]> | undefined;
+  filteredCities$: Observable<string[]> | undefined;
 
   savingProfile = false;
 
@@ -36,7 +50,7 @@ export class ProfileComponent implements OnInit {
     addressComp: [''],
     state: [''],
     city: [''],
-    zipCode: ['']
+    zipCode: [''],
   });
 
   constructor(
@@ -45,7 +59,9 @@ export class ProfileComponent implements OnInit {
     private toast: NgToastService,
     private router: Router,
     private userService: UsersService,
-    private fb: NonNullableFormBuilder
+    private fb: NonNullableFormBuilder,
+    private getData: GetDataService,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -54,18 +70,70 @@ export class ProfileComponent implements OnInit {
       .subscribe((user) => {
         this.profileForm.patchValue({ ...user });
       });
-      debugger
-      this.filteredOptions = this.profileForm.valueChanges.pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.state),
-        map(state => this._filter(state || ''))
-      );
+
+    // Call the getCountries function
+    this.getData.getCountries().subscribe((response: any) => {
+      const countries = response.data;
+      console.log(countries);
+
+      // Retrieve the states of a specific country (e.g., Brazil)
+      const country = countries.find((c: any) => c.name === 'Brazil');
+      if (country) {
+        const states = country.states;
+        console.log(states);
+        debugger;
+        this.filteredStates = this.profileForm.valueChanges.pipe(
+          startWith(''),
+          map((value) => (typeof value === 'string' ? value : value.state)),
+          map((state) => this._filter(state || '', states))
+        );
+
+        // Listen to state field changes
+        this.profileForm
+          .get('state')
+          ?.valueChanges.subscribe((selectedState) => {
+            if (selectedState) {
+              const selectedCountry = 'Brazil';
+              const requestData = {
+                country: selectedCountry,
+                state: selectedState,
+              };
+
+              const httpOptions = {
+                headers: new HttpHeaders({
+                  'Content-Type': 'application/json',
+                }),
+              };
+
+              this.http
+                .post(
+                  'https://countriesnow.space/api/v0.1/countries/state/cities',
+                  requestData,
+                  httpOptions
+                )
+                .subscribe({
+                  next: (response: any) => {
+                    const cities = response.data;
+                    debugger
+                    this.filteredCities$ = of(cities); 
+                    
+                  },
+                  error: (error: any) => {
+                    console.error('Error fetching cities:', error);
+                  },
+                });
+            }
+          });
+      }
+    });
   }
 
-  private _filter(value: string): string[] {
+  private _filter(value: string, states: any[]): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    return states
+      .filter((state) => state.name.toLowerCase().includes(filterValue))
+      .map((state) => state.name);
   }
 
   uploadImage(event: any, user: ProfileUser) {
@@ -133,5 +201,4 @@ export class ProfileComponent implements OnInit {
         },
       });
   }
-
 }

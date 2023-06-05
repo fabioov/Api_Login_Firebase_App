@@ -29,16 +29,22 @@
 	  </div>
 	  <div class="row">
 		<mat-form-field>
-		  <input type="text" matInput formControlName="state" placeholder="State" [matAutocomplete]="auto"/>
-		  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-			<mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-			  {{option}}
-			</mat-option>
-		  </mat-autocomplete>
-		</mat-form-field>
-		<mat-form-field>
-		  <input type="text" matInput formControlName="city" placeholder="City" />
-		</mat-form-field>
+			<input type="text" matInput formControlName="state" placeholder="State" [matAutocomplete]="stateAuto"/>
+			<mat-autocomplete #stateAuto="matAutocomplete">
+			  <mat-option *ngFor="let option of filteredStates | async" [value]="option">
+				{{ option }}
+			  </mat-option>
+			</mat-autocomplete>
+		  </mat-form-field>
+		  
+		  <mat-form-field>
+			<input type="text" matInput formControlName="city" placeholder="City" [matAutocomplete]="cityAuto"/>
+			<mat-autocomplete #cityAuto="matAutocomplete">
+			  <mat-option *ngFor="let item of filteredCities$ | async" [value]="item">
+				{{ item }}
+			  </mat-option>
+			</mat-autocomplete>
+		  </mat-form-field>
 	  </div>
 
 	  <mat-form-field>
