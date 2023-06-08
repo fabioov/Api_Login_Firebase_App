@@ -1,5 +1,11 @@
 <mat-toolbar> 
-  <a class="link" routerLink="">Sign up Flow with Firebase</a>
+  <div class="toolbar-buttons">
+    <button mat-button routerLink="/home">Home</button>
+    <span class="toolbar-divider">|</span>
+    <button mat-button routerLink="/profile">Torneio</button>
+    <span class="toolbar-divider">|</span>
+    <button mat-button routerLink="/sobre">Sobre</button>
+  </div>
   <ng-container *ngIf="user$ | async as user; else loginButton">
     <button mat-button [mat-menu-trigger-for]="userMenu">
       <span class="icons-container">
@@ -26,7 +32,7 @@
 
 <mat-menu #userMenu="matMenu">
   <button mat-menu-item (click)="logout()">Logout</button>
-  <button mat-menu-item routerLink="profile">Profile</button>
+  <button mat-menu-item routerLink="/profile">Profile</button>
 </mat-menu>
 
 <lib-ng-toast></lib-ng-toast>

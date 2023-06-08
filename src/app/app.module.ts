@@ -29,6 +29,14 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HttpClientModule } from '@angular/common/http';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -61,14 +69,22 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     HotToastModule,
     MatProgressSpinnerModule,
     HttpClientModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatTabsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxMatTimepickerModule,
+    FormsModule,
+    DatePickerModule,
+    FlexLayoutModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { 
 
   constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer){
+
     this.matIconRegistry.addSvgIcon(
       'Google',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/Google.svg')

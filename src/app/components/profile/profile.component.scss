@@ -25,5 +25,17 @@
 .row {
     display: flex;
     gap: 16px;
+    justify-content: center;
 }
+.zipCodeBtn {
+    margin-top: 1px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.center-icon {
+    margin-left: 8px; 
+  }
 

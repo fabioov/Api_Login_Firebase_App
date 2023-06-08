@@ -1,0 +1,77 @@
+.tab-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .tab {
+    margin-top: 20px;
+  }
+
+  .banner-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    margin-bottom: 20px;
+  }
+  
+  .banner-image img {
+    width: 90%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+  
+  
+  .torneio-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .form-field {
+    width: 90%;
+    margin-bottom: 10px;
+  }
+  
+  .tab-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .tab-content {
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; 
+  }
+
+  .row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    width: 90%;
+}
+
+.row .city-field{
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.row .state-field{
+  width: 20%;
+  margin-bottom: 10px;
+}
+
+.row .complement-field{
+  width: 80%;
+  margin-bottom: 10px;
+}
+
+.row .zipcode-field{
+  width: 40%;
+  margin-bottom: 10px;
+}

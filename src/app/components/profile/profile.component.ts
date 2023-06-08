@@ -18,13 +18,11 @@ import {
   tap,
 } from 'rxjs';
 import { ProfileUser } from 'src/app/models/user-profile';
-import { Country } from 'src/app/models/countries';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { GetDataService } from 'src/app/services/get-data.service';
 import { ImageUploadService } from 'src/app/services/image-upload.service';
 import { UsersService } from 'src/app/services/users.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-
 
 @UntilDestroy()
 @Component({
@@ -35,9 +33,6 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 export class ProfileComponent implements OnInit {
   user$ = this.userService.currentUserProfile$;
 
-  filteredStates: Observable<string[]> | undefined;
-  filteredCities$: Observable<string[]> | undefined;
-
   savingProfile = false;
 
   profileForm = this.fb.group({
@@ -47,6 +42,8 @@ export class ProfileComponent implements OnInit {
     lastName: [''],
     phone: [''],
     address: [''],
+    neighborhood: [''],
+    addressNumber: [''],
     addressComp: [''],
     state: [''],
     city: [''],
@@ -70,62 +67,6 @@ export class ProfileComponent implements OnInit {
       .subscribe((user) => {
         this.profileForm.patchValue({ ...user });
       });
-
-    // Call the getCountries function
-    this.getData.getCountries().subscribe((response: any) => {
-      const countries = response.data;
-      console.log(countries);
-
-      // Retrieve the states of a specific country (e.g., Brazil)
-      const country = countries.find((c: any) => c.name === 'Brazil');
-      if (country) {
-        const states = country.states;
-        console.log(states);
-        debugger;
-        this.filteredStates = this.profileForm.valueChanges.pipe(
-          startWith(''),
-          map((value) => (typeof value === 'string' ? value : value.state)),
-          map((state) => this._filter(state || '', states))
-        );
-
-        // Listen to state field changes
-        this.profileForm
-          .get('state')
-          ?.valueChanges.subscribe((selectedState) => {
-            if (selectedState) {
-              const selectedCountry = 'Brazil';
-              const requestData = {
-                country: selectedCountry,
-                state: selectedState,
-              };
-
-              const httpOptions = {
-                headers: new HttpHeaders({
-                  'Content-Type': 'application/json',
-                }),
-              };
-
-              this.http
-                .post(
-                  'https://countriesnow.space/api/v0.1/countries/state/cities',
-                  requestData,
-                  httpOptions
-                )
-                .subscribe({
-                  next: (response: any) => {
-                    const cities = response.data;
-                    debugger
-                    this.filteredCities$ = of(cities); 
-                    
-                  },
-                  error: (error: any) => {
-                    console.error('Error fetching cities:', error);
-                  },
-                });
-            }
-          });
-      }
-    });
   }
 
   private _filter(value: string, states: any[]): string[] {
@@ -200,5 +141,39 @@ export class ProfileComponent implements OnInit {
           this.savingProfile = false; // Set savingProfile to false when the save operation is complete
         },
       });
+  }
+
+  onSearchZipCode() {
+    const zipcode = this.profileForm.get('zipCode')?.value;
+
+  if (zipcode) {
+    this.getData.getDataByZipCode(zipcode).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        debugger
+        // Set the retrieved data to the corresponding form fields
+        if (data.erro !== true) {
+          this.profileForm.patchValue({
+            address: data.logradouro,
+            city: data.localidade,
+            neighborhood: data.bairro,
+            state: data.uf,
+            addressNumber: '',
+            addressComp: '',
+          });
+        } else {
+          this.toast.error({
+            detail: 'Data failed!',
+            summary: `Zip Code ${ zipcode } not found!`,
+            duration: 5000,
+          });
+        }
+      },
+      error: (error: any) => {
+        debugger
+        console.error('Error fetching ZIP code data:', error);
+      }
+    });
+  }
   }
 }

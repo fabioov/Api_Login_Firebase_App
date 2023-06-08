@@ -24,6 +24,8 @@ import { ProfileUser } from 'src/app/models/user-profile';
 })
 export class LoginComponent implements OnInit {
   loginInProgress = false;
+  hideLoginForm = false; 
+  loading = false;
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -92,6 +94,8 @@ export class LoginComponent implements OnInit {
   }
 
   signInWithGoogle() {
+    this.loading = true;
+    this.hideLoginForm = true;
     this.authService
       .googleSignIn()
       .pipe(
@@ -105,6 +109,8 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/home']);
         }),
         catchError((error: any) => {
+          this.hideLoginForm = false;
+          this.loading = false;
           this.toast.error({
             detail: 'Google sign-in failed',
             summary: 'An error occurred during Google sign-in!',
@@ -117,6 +123,8 @@ export class LoginComponent implements OnInit {
   }
 
   signInWithGithub() {
+    this.loading = true;
+    this.hideLoginForm = true;
     this.authService
       .githubSignIn()
       .pipe(
@@ -130,16 +138,22 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/home']);
         }),
         catchError((error: any) => {
+          this.hideLoginForm = false;
+          this.loading = false;
           console.error('GitHub sign-in error:', error); 
           this.toast.error({
             detail: 'GitHub sign-in failed',
             summary: 'An error occurred during GitHub sign-in!',
             duration: 5000,
+            
           });
           return of(null); // Return an observable with a value of null to continue the stream
+          
         })
       )
       .subscribe();
   }
+
+
   
 }

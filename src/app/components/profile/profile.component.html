@@ -1,75 +1,126 @@
-<div *ngIf="user$ | async as user" class="form-container mat-elevation-z5 text-center">
+<div *ngIf="user$ | async as user"
+	class="form-container mat-elevation-z5 text-center">
 	<h1>User Profile</h1>
 	<div class="profile-image">
-	  <img [src]="user.photoURL ?? '/assets/images/placeHolder.jpeg'" width="120" height="120">
-	  <button (click)="inputField.click()" mat-mini-fab>
-		<mat-icon>edit</mat-icon>
-	  </button>
+		<img [src]="user.photoURL ?? '/assets/images/placeHolder.jpeg'"
+			width="120"
+			height="120">
+		<button (click)="inputField.click()"
+			mat-mini-fab>
+			<mat-icon>edit</mat-icon>
+		</button>
 	</div>
-  
-	<input #inputField type="file" hidden (change)="uploadImage($event, user)">
-  
-	<form class="margin-top" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
-	  <div class="row">
-		<mat-form-field>
-		  <input type="text" matInput formControlName="firstName" placeholder="First Name" />
-		</mat-form-field>
-		<mat-form-field>
-		  <input type="text" matInput formControlName="lastName" placeholder="Last Name" />
-		</mat-form-field>
-	  </div>
-  
-	  <div class="row">
-		<mat-form-field>
-		  <input type="text" matInput formControlName="displayName" placeholder="Display Name" />
-		</mat-form-field>
-		<mat-form-field>
-		  <input type="number" matInput formControlName="phone" placeholder="Phone" />
-		</mat-form-field>
-	  </div>
-	  <div class="row">
-		<mat-form-field>
-			<input type="text" matInput formControlName="state" placeholder="State" [matAutocomplete]="stateAuto"/>
-			<mat-autocomplete #stateAuto="matAutocomplete">
-			  <mat-option *ngFor="let option of filteredStates | async" [value]="option">
-				{{ option }}
-			  </mat-option>
-			</mat-autocomplete>
-		  </mat-form-field>
-		  
-		  <mat-form-field>
-			<input type="text" matInput formControlName="city" placeholder="City" [matAutocomplete]="cityAuto"/>
-			<mat-autocomplete #cityAuto="matAutocomplete">
-			  <mat-option *ngFor="let item of filteredCities$ | async" [value]="item">
-				{{ item }}
-			  </mat-option>
-			</mat-autocomplete>
-		  </mat-form-field>
-	  </div>
 
-	  <mat-form-field>
-		<input type="text" matInput formControlName="address" placeholder="Address" />
-	  </mat-form-field>
-	  <div class="row">
-	  <mat-form-field>
-		<input type="text" matInput formControlName="addressComp" placeholder="Complement" />
-	  </mat-form-field>
-	  <mat-form-field>
-		<input type="text" matInput formControlName="zipCode" placeholder="ZIP Code" />
-	  </mat-form-field>
-	</div>
-	  <div class="margin-top">
-		<ng-container *ngIf="!savingProfile; else spinnerContainer">
-		  <button type="submit" mat-raised-button color="primary">
-			Save
-		  </button>
-		</ng-container>
-		<ng-template #spinnerContainer>
-		  <div class="spinner-container">
-			<mat-spinner diameter="30"></mat-spinner>
-		  </div>
-		</ng-template>
-	  </div>
+	<input #inputField
+		(change)="uploadImage($event, user)"
+		type="file"
+		hidden>
+
+	<form [formGroup]="profileForm"
+		(ngSubmit)="saveProfile()"
+		class="margin-top">
+		<div class="row">
+			<mat-form-field>
+				<input type="text"
+					matInput
+					formControlName="firstName"
+					placeholder="First Name">
+			</mat-form-field>
+			<mat-form-field>
+				<input type="text"
+					matInput
+					formControlName="lastName"
+					placeholder="Last Name">
+			</mat-form-field>
+		</div>
+
+		<div class="row">
+			<mat-form-field>
+				<input type="text"
+					matInput
+					formControlName="displayName"
+					placeholder="Display Name">
+			</mat-form-field>
+			<mat-form-field>
+				<input type="number"
+					matInput
+					formControlName="phone"
+					placeholder="Phone">
+			</mat-form-field>
+		</div>
+		<div class="row">
+			<mat-form-field>
+				<input (keydown.enter)="$event.preventDefault()"
+					type="text"
+					matInput
+					formControlName="zipCode"
+					placeholder="ZIP Code">
+			</mat-form-field>
+			<button (click)="onSearchZipCode()"
+				class="zipCodeBtn"
+				mat-raised-button
+				color="primary"
+				type="button">
+				<mat-icon class="center-icon">search</mat-icon>
+			</button>
+		</div>
+
+		<mat-form-field>
+			<input type="text"
+				matInput
+				formControlName="address"
+				placeholder="Address">
+		</mat-form-field>
+		<div class="row">
+			<mat-form-field>
+				<input type="text"
+					matInput
+					formControlName="neighborhood"
+					placeholder="Neighborhood">
+			</mat-form-field>
+			<mat-form-field>
+				<input type="text"
+					matInput
+					formControlName="addressNumber"
+					placeholder="Address Number">
+			</mat-form-field>
+			<mat-form-field>
+				<input type="text"
+					matInput
+					formControlName="addressComp"
+					placeholder="Complement">
+			</mat-form-field>
+		</div>
+		<div class="row">
+			<mat-form-field>
+				<input type="text"
+					matInput
+					formControlName="state"
+					placeholder="State">
+
+			</mat-form-field>
+
+			<mat-form-field>
+				<input type="text"
+					matInput
+					formControlName="city"
+					placeholder="City">
+
+			</mat-form-field>
+		</div>
+		<div class="margin-top">
+			<ng-container *ngIf="!savingProfile; else spinnerContainer">
+				<button type="submit"
+					mat-raised-button
+					color="primary">
+					Save
+				</button>
+			</ng-container>
+			<ng-template #spinnerContainer>
+				<div class="spinner-container">
+					<mat-spinner diameter="30"></mat-spinner>
+				</div>
+			</ng-template>
+		</div>
 	</form>
-  </div>
-  
+</div>

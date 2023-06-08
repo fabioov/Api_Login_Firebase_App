@@ -15,19 +15,9 @@ export class GetDataService {
 
   constructor(private http: HttpClient) { }
 
-  getCountries(): Observable<any> {
-    const url = 'https://countriesnow.space/api/v0.1/countries/states';
-    return this.http.get(url);
-  }
+  getDataByZipCode(zipcode: string): Observable<any> {
 
-  getCities(country: string, state: string): Observable<any> {
-    
-    const requestBody = {
-      country: country,
-      state: state
-    };
-
-    return this.http.post<any>(this.apiUrl, requestBody);
+    return this.http.get<any>(`https://viacep.com.br/ws/${zipcode}/json/`);
   }
 
 }

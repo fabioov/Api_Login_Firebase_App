@@ -1,55 +1,76 @@
-<div class="form-container mat-elevation-z5">
-    <h1>Login</h1>
-    <form [formGroup]="loginForm" (ngSubmit)="submit()">
-      <mat-form-field>
-        <input matInput placeholder="Email address" formControlName="email" style="text-transform: lowercase;" />
-        <mat-error *ngIf="email?.errors?.['required']">
-          Email is required!
-        </mat-error>
-        <mat-error *ngIf="email?.errors?.['email']">
-          Enter a valid email format!
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          placeholder="Password"
-          formControlName="password"
-          type="password"
-        />
-        <mat-error *ngIf="password?.errors?.['required']">
-          Password is required!
-        </mat-error>
-      </mat-form-field>
-      <div class="left">
-        <span><a routerLink="/forgot-password">Forgot password?</a></span>
-      </div>
-      <div class="center margin-top">
-        <ng-container *ngIf="loginInProgress">
-          <div class="spinner-container">
-            <mat-spinner diameter="26"></mat-spinner>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="!loginInProgress">
-          <button mat-raised-button color="primary" type="submit">
-            Login
-          </button>
-        </ng-container>
-      </div>
-      <div class="row">
-        <button mat-button style="padding: 1rem; font-size: .7rem; width: 180px;" (click)="signInWithGoogle()">
-          <mat-icon svgIcon="Google"></mat-icon> Google Login
-        </button>
-        <button mat-button style="padding: 1rem; font-size: .7rem; width: 180px;" (click)="signInWithGithub()">
-            <mat-icon svgIcon="Github"></mat-icon> Github Login
-          </button>
-      </div>
-      
-      
-    </form>
-    <span class="center margin-top"
-      >New to our platform?<a class="sign-up-link" routerLink="/signup"
-        >Sign Up!</a
-      ></span>
-  </div>
-  
+<div *ngIf="!loading"
+	[class.hide-form]="hideLoginForm"
+	class="form-container mat-elevation-z5">
+	<h1>Login</h1>
+	<form [formGroup]="loginForm"
+		(ngSubmit)="submit()">
+		<mat-form-field>
+			<input matInput
+				placeholder="Email address"
+				formControlName="email"
+				style="text-transform: lowercase;">
+			<mat-error *ngIf="email?.errors?.['required']">Email is required!</mat-error>
+			<mat-error *ngIf="email?.errors?.['email']">
+				Enter a valid email format!
+			</mat-error>
+		</mat-form-field>
+		<mat-form-field>
+			<input matInput
+				placeholder="Password"
+				formControlName="password"
+				type="password">
+			<mat-error *ngIf="password?.errors?.['required']">
+				Password is required!
+			</mat-error>
+		</mat-form-field>
+		<div class="left">
+			<span>
+				<a routerLink="/forgot-password">Forgot password?</a>
+			</span>
+		</div>
+		<div class="center margin-top">
+			<ng-container *ngIf="loginInProgress">
+				<div class="spinner-container">
+					<mat-spinner diameter="26"></mat-spinner>
+				</div>
+			</ng-container>
+			<ng-container *ngIf="!loginInProgress">
+				<button mat-raised-button
+					color="primary"
+					type="submit">
+					Login
+				</button>
+			</ng-container>
+		</div>
+		<div class="row">
+			<button (click)="signInWithGoogle()"
+				mat-button
+				style="padding: 1rem; font-size: .7rem; width: 180px;">
+				<mat-icon svgIcon="Google"></mat-icon>
+				Google Login
+			</button>
+			<button (click)="signInWithGithub()"
+				mat-button
+				style="padding: 1rem; font-size: .7rem; width: 180px;">
+				<mat-icon svgIcon="Github"></mat-icon>
+				Github Login
+			</button>
+		</div>
+
+	</form>
+	<span class="center margin-top">
+		New to our platform?
+		<a class="sign-up-link"
+			routerLink="/signup">
+			Sign Up!
+		</a>
+	</span>
+
+</div>
+<div *ngIf="loading">
+	<!-- Display the spinner -->
+	<div class="big-spinner-container">
+		<mat-spinner diameter="100"></mat-spinner>
+		<span class="center margin-top loginIn">Login In...</span>
+	</div>
+</div>
