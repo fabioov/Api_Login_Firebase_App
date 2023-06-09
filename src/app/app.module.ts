@@ -37,6 +37,8 @@ import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 @NgModule({
   declarations: [
@@ -76,7 +78,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     NgxMatTimepickerModule,
     FormsModule,
     DatePickerModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatTooltipModule
+
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

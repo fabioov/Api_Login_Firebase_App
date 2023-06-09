@@ -4,72 +4,151 @@
 			<span class="tab-title">{{tab.label}}</span>
 		</ng-template>
 		<div class="tab-content">{{tab.content}}</div>
-		
+
+		<!-- Torneios Tab -->
+
 		<div>
-			<ng-container *ngIf="tab.label === 'Torneio'">
-        <div class="banner-image"><img src="assets/images/padel_wallpaper.jpeg"/>
-        </div>
-				<form [formGroup]="form"
+			<ng-container *ngIf="activeTab === 'Torneios'">
+				<!-- Create Tournament Button -->
+				<button class="create-torneio-button"
+					matTooltip="Criar Torneio"
+					(click)="openTorneioTab()">
+					<mat-icon class="createIcon">add</mat-icon>
+					Criar Torneio
+				</button>
+				<!-- Tournament Header -->
+				<div class="tournament-header">
+					<div class="tournament-info">TORNEIO</div>
+					<div class="tournament-info">DATA</div>
+					<div class="tournament-info">CIDADE</div>
+					<div class="tournament-info">LOCAL</div>
+					<div class="tournament-info">AÇÕES</div>
+				</div>
+
+<!-- Tournament Container -->
+<div *ngIf="tournaments.length === 0" class="form-container-torneios mat-elevation-z5">
+	<div class="tournament-info">Nenhum evento para este clube ainda. Crie agora!</div>
+  </div>
+<div *ngFor="let tournament of tournaments" class="form-container-torneios mat-elevation-z5">
+	<div class="tournament-data">
+		<mat-icon class="tournament-icon" matTooltip="Informações Gerais">sports_tennis</mat-icon>
+	  <div class="tournament-info">
+		{{ tournament.tournamentName }}
+	  </div>
+	  <span class="divider">|</span>
+	  <div class="tournament-info">{{ tournament.startDate }} - {{ tournament.endDate }}</div>
+	  <span class="divider">|</span>
+	  <div class="tournament-info">{{ tournament.city }}</div>
+	  <span class="divider">|</span>
+	  <div class="tournament-info">{{ tournament.clubName }}</div>
+	  <div class="tournament-info">
+		<button class="edit-torneio-button" type="button" matTooltip="Editar">
+		  <mat-icon>edit</mat-icon>
+		</button>
+		<span class="button-spacing"></span>
+		<button class="delete-torneio-button" type="button" matTooltip="Deletar" (click)="deleteTournament(tournament)">
+		  <mat-icon>delete</mat-icon>
+		</button>
+	  </div>
+	</div>
+  </div>
+  
+  
+  
+			</ng-container>
+		</div>
+		<!-- Torneios Tab -->
+
+		<!-- Torneio Tab -->
+		<div>
+			<ng-container *ngIf="activeTab === 'Torneio'">
+				<div class="banner-image">
+					<img src="assets/images/padel_wallpaper.jpeg">
+				</div>
+				<form [formGroup]="tournamentForm"
 					class="torneio-form">
 					<mat-form-field class="form-field">
 						<input matInput
-							placeholder="Nome do torneio">
+							placeholder="Nome do torneio"
+							formControlName="tournamentName">
 					</mat-form-field>
-          <div class="row">
-					<mat-form-field class="form-field">
-						<mat-date-range-input [formGroup]="range"
-							[rangePicker]="picker">
-							<input matStartDate
-								formControlName="start"
-								placeholder="Start date">
-							<input matEndDate
-								formControlName="end"
-								placeholder="End date">
-						</mat-date-range-input>
-						<mat-datepicker-toggle [for]="picker"
-							matIconSuffix></mat-datepicker-toggle>
-						<mat-date-range-picker #picker></mat-date-range-picker>
-					</mat-form-field>
+					<div class="row">
+						<mat-form-field class="form-field">
+							<mat-date-range-input [formGroup]="tournamentForm"
+								[rangePicker]="picker">
+								<input matStartDate
+									formControlName="startDate"
+									placeholder="Start date">
+								<input matEndDate
+									formControlName="endDate"
+									placeholder="End date">
+							</mat-date-range-input>
+							<mat-datepicker-toggle [for]="picker"
+								matIconSuffix></mat-datepicker-toggle>
+							<mat-date-range-picker #picker></mat-date-range-picker>
+						</mat-form-field>
 
-					<mat-form-field class="form-field">
-						<input [formControl]="timeControl"
+						<mat-form-field class="form-field">
+							<input [formControl]="timeControl"
 							[ngxMatTimepicker]="picker2"
 							matInput
 							placeholder="Horário de início">
 						<ngx-mat-timepicker-toggle [for]="picker2"
 							matSuffix></ngx-mat-timepicker-toggle>
 						<ngx-mat-timepicker #picker2></ngx-mat-timepicker>
+						</mat-form-field>
+					</div>
+					<mat-form-field class="form-field">
+						<input matInput
+							placeholder="Clube"
+							formControlName="clubName">
 					</mat-form-field>
-        </div>
-          <mat-form-field class="form-field">
-            <input matInput placeholder="Clube"/>
-          </mat-form-field>
-          <div class="row">
-            <mat-form-field class="city-field">
-              <input matInput placeholder="Cidade" />
-            </mat-form-field>
-            <mat-form-field class="state-field">
-              <input matInput placeholder="Estado" />
-            </mat-form-field>
-          </div>          <div class="row">
-            <mat-form-field class="city-field">
-              <input matInput placeholder="Endereço" />
-            </mat-form-field>
-            <mat-form-field class="state-field">
-              <input matInput placeholder="Número" />
-            </mat-form-field>
-            </div>
-            <div class="row">
-              <mat-form-field class="complement-field">
-                <input matInput placeholder="Complemento" />
-              </mat-form-field>
-              <mat-form-field class="zipcode-field">
-                <input  matInput placeholder="CEP" />
-              </mat-form-field>
-          </div>
-
+					<div class="row">
+						<mat-form-field class="city-field">
+							<input matInput
+								placeholder="Cidade"
+								formControlName="city">
+						</mat-form-field>
+						<mat-form-field class="state-field">
+							<input matInput
+								placeholder="Estado"
+								formControlName="state">
+						</mat-form-field>
+					</div>
+					<div class="row">
+						<mat-form-field class="city-field">
+							<input matInput
+								placeholder="Endereço"
+								formControlName="address">
+						</mat-form-field>
+						<mat-form-field class="state-field">
+							<input matInput
+								placeholder="Número"
+								formControlName="addressNumber">
+						</mat-form-field>
+					</div>
+					<div class="row">
+						<mat-form-field class="complement-field">
+							<input matInput
+								placeholder="Complemento"
+								formControlName="addressComp">
+						</mat-form-field>
+						<mat-form-field class="zipcode-field">
+							<input matInput
+								placeholder="CEP"
+								formControlName="zipCode">
+						</mat-form-field>
+					</div>
 				</form>
+				<button (click)="saveTournament()"
+				class="create-torneio-button"
+				matTooltip="Criar Torneio">
+				<mat-icon class="saveIcon">save</mat-icon>
+				Salvar
+			</button>
 			</ng-container>
 		</div>
+		<!-- Torneio Tab -->
+
 	</mat-tab>
 </mat-tab-group>

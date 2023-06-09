@@ -85,10 +85,11 @@ export class SignupComponent implements OnInit {
       return;
     }
     this.signUpInProgress = true;
-
+debugger;
     this.authService
       .signUp(email, password)
       .pipe(
+        
         switchMap(({ user: { uid } }) =>
           this.userService.addUser({ uid, email, displayName: name })
         ),

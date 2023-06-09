@@ -75,3 +75,92 @@
   width: 40%;
   margin-bottom: 10px;
 }
+
+//Torneios TAB
+.form-container-torneios {
+  display: block;
+  max-width: 90%;
+  margin: auto;
+  background: #eceff1;
+  padding: 20px;
+  border-radius: 16px;
+  margin-top: 20px;
+}
+
+.create-torneio-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 200px; /* Adjust the width as needed */
+  margin: 20px auto; /* Center the button horizontally and add margin */
+  background-color: #007bffcc;
+  color: #fff;
+  padding: 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.saveIcon {
+  margin-right: 10px;
+}
+
+.createIcon {
+  margin-right: 10px;
+}
+
+.tournament-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  max-width: 92%;
+  margin: auto;
+}
+
+.tournament-data {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.tournament-info.with-separator {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
+.tournament-icon {
+  margin-right: 10px;
+}
+
+
+.tournament-info {
+  flex-basis: 20%;
+  text-align: center;
+}
+
+.button-spacing {
+  margin: 0 10px; /* Adjust the margin value as needed for spacing */
+}
+
+.edit-torneio-button {
+  background-color: #007bffcc;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-torneio-button {
+  background-color: #dc3545cc;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
